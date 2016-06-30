@@ -12,7 +12,7 @@ npm i
 
 Build everything
 ```shell
-NPM RUN BUILD
+npm run build
 ```
 
 Start a webserver on port 9090
