@@ -1,0 +1,69 @@
+/*------------------------------------*\
+    $MIXINS
+\*------------------------------------*/
+
+/* Rem Unit font sizes with relative fallback http:/seesparkbox.com/foundry/scss_rem_mixin_now_with_a_better_fallback
+	Usage: @include font-size(1, large);
+*/
+@mixin font-size( $decimal-size, $keyword: null ) {
+  @if $keyword{ font-size: $keyword; }
+  @else { font-size: $decimal-size * $base-font-multiplier * 16px;}
+  font-size: $decimal-size * 1rem;
+}
+
+
+@mixin triangle($direction, $color, $sizeW, $sizeH) {
+	@if $direction == "left" {
+		border-bottom: $sizeW solid transparent;
+		border-right: $sizeH solid $color;
+		border-top: $sizeW solid transparent;
+	}
+	@else if $direction == "right" {
+		border-bottom: $sizeW solid transparent;
+		border-left: $sizeH solid $color;
+		border-top: $sizeW solid transparent;
+	}
+	@else if $direction == "up" {
+		border-bottom: $sizeH solid $color;
+		border-left: $sizeW solid transparent;
+		border-right: $sizeW solid transparent;
+	}
+	@else if $direction == "down" {
+		border-right: $sizeW solid transparent;
+		border-left: $sizeW solid transparent;
+		border-top: $sizeH solid $color;
+	}
+
+	height: 0;
+	width: 0;
+}
+
+
+
+@mixin box($displayType: false, $width: false, $height: false, $pseudoElement: false) {
+	@if $displayType == "block" or  $displayType == "bl" or $displayType == "BL" {
+		display: block;
+	}
+	@else if $displayType == "inline-block" or  $displayType == "in-bl" or $displayType == "IN-BL" {
+		display: inline-block;
+	}
+	@else if $displayType == "inline" or  $displayType == "in" or $displayType == "IN" {
+		display: inline;
+	}
+	@else if $displayType == "none" {
+		display: none;
+	}
+
+	@if $pseudoElement == true {
+		content: '';
+	}
+
+	@if type-of($width) == number {
+		width: $width;
+	}
+
+	@if type-of($height) == number {
+		height: $height;
+	}
+
+}

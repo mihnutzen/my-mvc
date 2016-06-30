@@ -1,0 +1,213 @@
+/**
+ * wtgrid.scss
+ *
+ *
+ * @author Mihnea Belcin
+ */
+
+/*------------------------------------*\
+    GRID SYSTEM
+\*------------------------------------*/
+
+@mixin responsiveGrid($type, $config, $gutter) {
+  $columnCount: map-get($config, 'columnCount');
+  $columnDistribution: map-get($config, 'columnDistribution');
+  $rGutter: map-get($config, 'gutter');
+
+  @include responsive($type) {
+
+    @if map-has-key($config, 'columnCount') {
+      .grid {
+        $columnArray: map-get($config, 'columnCount');
+        
+        @if $rGutter == null {
+          $rGutter: $gutter;
+        }
+
+        @each $column in $columnArray {
+          $columnCount: nth($columnArray, index($columnArray, $column));
+
+          .col-#{$type}-#{$columnCount} {
+            @if $rGutter != 0 {
+              width: calc(#{columnWidth($column)}  - #{$rGutter});
+              margin-left: $rGutter / 2;
+              margin-right: $rGutter / 2;
+            } @else {
+              width: #{columnWidth($column)};
+            }
+          }
+        }
+      }
+    }
+
+    @if map-has-key($config, 'columnVariations') {
+      .grid {
+        $columnVariations: map-get($config, 'columnVariations');
+        @each $column in $columnVariations {
+          $variation: nth($columnVariations, index($columnVariations, $column));
+          $variation: numbers($variation);
+          $columnCount: nth($variation, 1);
+          $gridCount: nth($variation, 2);
+
+          .col-#{$type}-#{$columnCount}o#{$gridCount} {
+            @if $rGutter != 0 {
+              width: calc(#{columnWidth($columnCount, $gridCount)} - #{$rGutter});
+              margin-left: $rGutter / 2;
+              margin-right: $rGutter / 2;
+            } @else {
+              width: #{columnWidth($columnCount, $gridCount)};
+            }
+            
+          }
+        }
+      }
+    }
+  }
+}
+
+$gridInit: 0;
+$responsiveBreakpoints: (
+  s:  true,
+  m:  true,
+  l: true,
+  xl: true
+);
+@mixin generateGrid($config) {
+  $gridGutter: false;
+  $gutter: 0;
+
+  @if map-has-key($config, 'gutter') {
+    $gutter: map-get($config, 'gutter');
+    $gridGutter: true;
+  }
+
+  @if $gridInit == 0 {
+    $gridInit: 1 !global;
+    $gutter: 0;
+
+    .grid {
+      width: inherit;
+      @if $gridGutter == true {
+        // width: calc(100% + #{map-get($config, 'gutter')});
+        // margin-left: -1 *  map-get($config, 'gutter') / 2;
+        padding-left: map-get($config, 'gutter') / 2;
+        padding-right: map-get($config, 'gutter') / 2;
+      }
+    }
+      .grid [class*='col-'] {
+        float: left;
+        
+        @if $gridGutter == true {
+          
+        }
+      }
+  }
+
+  // EQUAL COLUMNS
+  @if map-has-key($config, 'columnCount') {
+    .grid {
+      $columnArray: map-get($config, 'columnCount');
+      @each $column in $columnArray {
+        $columnCount: nth($columnArray, index($columnArray, $column));
+
+        .col-#{$column} {
+          @if $gridGutter == true {
+            width: calc(#{columnWidth($column)}  - #{$gutter});
+            margin-left: $gutter / 2;
+            margin-right: $gutter / 2;
+          } @else {
+            width: #{columnWidth($column)};
+          }
+        }
+      }
+    }
+  }
+
+
+  // DISTRIBUTED COLUMNS
+  @if map-has-key($config, 'columnVariations') {
+    .grid {
+      $columnVariations: map-get($config, 'columnVariations');
+      @each $column in $columnVariations {
+        $variation: nth($columnVariations, index($columnVariations, $column));
+        $variation: numbers($variation);
+        $columnCount: nth($variation, 1);
+        $gridCount: nth($variation, 2);
+
+        .col-#{$columnCount}o#{$gridCount} {
+          @if $gridGutter == true {
+            width: calc(#{columnWidth($columnCount, $gridCount)}  - #{$gutter});
+            margin-left: $gutter / 2;
+            margin-right: $gutter / 2;
+          } @else {
+            width: #{columnWidth($columnCount, $gridCount)};
+          }
+        }
+      }
+    }
+  }
+  @each $type in map-keys($config) {
+    @if map-has-key($responsiveBreakpoints, $type) {
+      @include responsiveGrid($type, map-get($config, $type), $gutter);
+    }
+    
+  }
+}
+
+
+@function columnWidth($count, $total: 1) {
+  @if $total == 1 {
+    @return (100% / $count);  
+  } @else {
+    @return (number($count) / number($total) * 100%);
+  }
+  
+}
+
+@function number($string) {
+  $strings: "0" "1" "2" "3" "4" "5" "6" "7" "8" "9";
+  $numbers:  0   1   2   3   4   5   6   7   8   9 ;
+  $result: 0;
+
+  @for $i from 1 through str-length($string) {
+    $character: str-slice($string, $i, $i);
+    $index: index($strings, $character);
+
+    @if not $index {
+      @warn "Unknown character `#{$character}`.";
+      @return false;
+    }
+
+    $number: nth($numbers, $index);
+    $result: $result * 10 + $number;
+  }
+
+  @return $result;
+}
+
+
+@function numbers($string) {
+  $splitPosition: str-index($string, "o");
+  $stringLength: str-length($string);
+  $firstNumber: 0;
+  $secondNumber: 0;
+
+  @if $splitPosition == 2 {
+    $firstNumber: str-slice($string, 0,1);
+    $secondNumber: str-slice($string, 3,4);
+  }
+
+  @if $splitPosition == 3 {
+    @if $stringLength == 4 {
+      $firstNumber: str-slice($string, 0,2);
+      $secondNumber: str-slice($string, 4,5);
+    } @else {
+      $firstNumber: str-slice($string, 0,2);
+      $secondNumber: str-slice($string, 4,6);
+    }
+    
+  }
+
+  $numbers: $firstNumber $secondNumber;
+  @return $numbers;
+}

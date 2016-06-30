@@ -1,0 +1,13 @@
+.demoComponent {
+  > h1 {
+    margin: $spacing*2 $spacing;
+  }
+
+  > p {
+    display: inline-block;
+    margin: $spacing;
+    padding: $spacing/2;
+
+    background: $lightGray;
+  }
+}

@@ -1,0 +1,13 @@
+$fontDefault: "HelveticaNeue", "Helvetica", "Arial", sans-serif;
+$fontCustom: 'Rambla', sans-serif;
+
+body,
+body *:after,
+body *:before {
+	font-family: $fontCustom;
+	font-size: 14px;
+}
+
+h1 {
+  font-size: 24px;
+}
