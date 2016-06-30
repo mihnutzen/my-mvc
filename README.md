@@ -5,12 +5,12 @@ playground for building apps
 # setup
 Node v4.x needed
 
-NPM I - to install dependencies
-NPM RUN BUILD - to build everything
-NPM RUN SERVE - to start a webserver on port 9090
+NPM I - to install dependencies \n
+NPM RUN BUILD - to build everything \n
+NPM RUN SERVE - to start a webserver on port 9090 \n
 
-watch for changes with
-NPM RUN WATCH - to watch for everything
-NPM RUN WATCH:SCRIPTS | NPM RUN WATCH:STYLES | NPM RUN WATCH:MARKUP - to watch for specific files
+watch for changes with \n
+NPM RUN WATCH - to watch for everything \n
+NPM RUN WATCH:SCRIPTS | NPM RUN WATCH:STYLES | NPM RUN WATCH:MARKUP - to watch for specific files \n
 
-NPM RUN DEV - to start server, start live-reload, start watchers 
+NPM RUN DEV - to start server, start live-reload, start watchers \n
