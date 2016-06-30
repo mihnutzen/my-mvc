@@ -25,7 +25,7 @@ watch for changes
 npm run watch
 ```
 
-watch specific type of failes
+watch specific type of files
 ```shell
 npm run watch:scripts
 npm run watch:styles
